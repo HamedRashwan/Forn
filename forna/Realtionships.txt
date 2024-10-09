@@ -1,0 +1,17 @@
+Entities: Products, Categories, Suppliers, Customers, Orders, Order_Items, Employees, Inventory, Invoices.
+
+Relationships:
+
+Categories → Products: One-to-Many
+
+Products → Suppliers: Many-to-One
+
+Orders → Customers: Many-to-One
+
+Orders → Order_Items: One-to-Many
+
+Order_Items → Products: Many-to-One
+
+Orders → Invoices: One-to-One
+
+Inventory → Products: One-to-One

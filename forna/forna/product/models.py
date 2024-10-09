@@ -13,14 +13,14 @@ class Supplier(models.Model):
     def __str__(self):
         return self.supplier_name
 
-
 class Product(models.Model):
-    product_name = models.CharField(max_length=255)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    product_name = models.CharField(max_length=255)  # Make sure this exists
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock_quantity = models.IntegerField()
-    description = models.TextField(null=True, blank=True)
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    description = models.TextField(blank=True, null=True)
+    stock_quantity = models.IntegerField(default=0) 
+
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    supplier = models.ForeignKey('Supplier', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.product_name
@@ -69,9 +69,15 @@ class Employee(models.Model):
 
 class Inventory(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
-    stock_quantity = models.IntegerField()
+    stock_quantity = models.IntegerField(default=1)
     reorder_level = models.IntegerField()
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+
+    def check_reorder(self):
+        if self.stock_quantity <= self.reorder_level:
+            # Trigger reorder or alert
+            return "Reorder required"
+        return "Stock is sufficient"
 
     def __str__(self):
         return f"Inventory for {self.product.product_name}"
